@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker meta
-        id: biblioteca # you'll use this in the next step
+        id: ulcm # you'll use this in the next step
         uses: docker/metadata-action@v5
         with:
           # list of Docker images to use as base name for tags
@@ -57,5 +57,5 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.biblioteca.outputs.tags }}
-          labels: ${{ steps.biblioteca.outputs.labels }}
+          tags: ${{ steps.ulcm.outputs.tags }}
+          labels: ${{ steps.ulcm.outputs.labels }}
