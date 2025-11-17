@@ -18,41 +18,30 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     ca-certificates \
     dma  \
     ghostscript \
-    mariadb-client \
     openssl \
-    p7zip-full \
-    p7zip-rar \ 
-    unrar \
+    postgresql-client \
     unzip \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
     intl \
-    gd \
     opcache \
     pdo_mysql \
-    zip \
     bcmath \
-    exif \
-    imagick \
     @composer \
+    pgsql \
+    pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
-
-# Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
-COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
-RUN chmod +x /usr/bin/get_kepubify_url.sh ; \
-    URL=$(/usr/bin/get_kepubify_url.sh) && curl -f -vvv -o /usr/bin/kepubify -L "$URL" && chmod +x /usr/bin/kepubify
 
 RUN a2enmod rewrite
 
-COPY docker/001-biblioteca.conf /etc/apache2/sites-enabled/001-biblioteca.conf
+COPY docker/001-ulcm.conf /etc/apache2/sites-enabled/001-ulcm.conf
 RUN touch /var/www/.bash_history && chmod 777 /var/www/.bash_history
 # Run from unprivileged port 8080 only
 RUN sed -e 's/Listen 80/Listen 8080/g' -i /etc/apache2/ports.conf
 
 COPY ./docker/dma.conf /etc/dma/dma.conf
-COPY ./docker/biblioteca.ini /usr/local/etc/php/conf.d/biblioteca.ini
-COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
+COPY ./docker/ulcm.ini /usr/local/etc/php/conf.d/ulcm.ini
 
 ARG UNAME=www-data
 ARG UGROUP=www-data
